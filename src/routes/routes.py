@@ -63,3 +63,28 @@ def register_routes(app):
         }
         data.STUDENTS.append(new_student)
         return jsonify(new_student), 201 
+
+    @app.put("/students/<int:student_id>")
+    def update_student(student_id):
+        student = next((s for s in data.STUDENTS if s["id"] == student_id), None)
+        if student is None:
+            return jsonify({"error": "Étudiant non trouvé"}), 404
+
+        req_data = request.get_json(silent=True)
+        if not req_data:
+            return jsonify({"error": "Corps de requête requis"}), 400
+
+        for field in ("firstName", "lastName", "email", "grade"):
+            if field in req_data:
+                student[field] = req_data[field]
+
+        return jsonify({"message": "Étudiant modifié"}), 200
+
+    @app.delete("/students/<int:student_id>")
+    def delete_student(student_id):
+        student = next((s for s in data.STUDENTS if s["id"] == student_id), None)
+        if student is None:
+            return jsonify({"error": "Étudiant non trouvé"}), 404
+
+        data.STUDENTS = [s for s in data.STUDENTS if s["id"] != student_id]
+        return jsonify({"message": "Étudiant supprimé"}), 200
