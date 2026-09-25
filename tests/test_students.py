@@ -134,4 +134,3 @@ def test_search_students(client):
 def test_search_no_query(client):
     resp = client.get("/students/search")
     assert resp.status_code == 400
-    

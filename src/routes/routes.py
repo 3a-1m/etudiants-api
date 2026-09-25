@@ -62,7 +62,7 @@ def register_routes(app):
             "grade": req_data.get("grade", 0),
         }
         data.STUDENTS.append(new_student)
-        return jsonify(new_student), 201 
+        return jsonify(new_student), 201
 
     @app.put("/students/<int:student_id>")
     def update_student(student_id):
